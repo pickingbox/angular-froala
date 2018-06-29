@@ -78,7 +78,13 @@
               }
               else {
                 // Set HTML.
-                element.froalaEditor('html.set', ngModel.$viewValue || '', true);
+                var firstLoad = false;
+                if (firstLoad) {
+                  element.froalaEditor('html.set', ngModel.$viewValue || '', true);
+                } else {
+                  firstLoad = true;
+                  setTimeout(function() {element.froalaEditor('html.set', ngModel.$viewValue || '', true);}, 0);
+                }
 
                 if (ctrl.editorInitialized) {
                   //This will reset the undo stack everytime the model changes externally. Can we fix this?
