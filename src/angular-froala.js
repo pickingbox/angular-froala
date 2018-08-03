@@ -92,6 +92,7 @@
               }
 
               if (ctrl.editorInitialized) {
+                value = element.froalaEditor('clean.html', value, [], [], false);
                 return element.froalaEditor('node.isEmpty', jQuery('<div>' + value + '</div>').get(0));
               }
 
