@@ -77,13 +77,15 @@
                 }
               }
               else {
-                // Set HTML.
-                element.froalaEditor('html.set', ngModel.$viewValue || '', true);
-                setTimeout(function(){
-                  element.froalaEditor('size.syncIframe');
-                });
 
                 if (ctrl.editorInitialized) {
+                    // Set HTML.
+                    element.froalaEditor('html.set', ngModel.$viewValue || '', true);
+                    if(ctrl.options.iframe) {
+                        setTimeout(function(){
+                            element.froalaEditor('size.syncIframe');
+                        });
+                    }
                   //This will reset the undo stack everytime the model changes externally. Can we fix this?
                   element.froalaEditor('undo.reset');
                   element.froalaEditor('undo.saveStep');
@@ -116,6 +118,11 @@
 
               ctrl.registerEventsWithCallbacks('froalaEditor.initialized', function () {
                 ctrl.editorInitialized = true;
+                  if(ctrl.options.iframe) {
+                      setTimeout(function(){
+                          element.froalaEditor('size.syncIframe');
+                      });
+                  }
               });
 
               // Register events provided in the options
