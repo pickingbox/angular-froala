@@ -82,6 +82,13 @@
                   //This will reset the undo stack everytime the model changes externally. Can we fix this?
                   element.froalaEditor('undo.reset');
                   element.froalaEditor('undo.saveStep');
+
+                  // Resize the iframe
+                  if(ctrl.options.iframe) {
+                      setTimeout(function(){
+                          element.froalaEditor('size.syncIframe');
+                      });
+                  }
                 }
               }
             };
@@ -92,6 +99,8 @@
               }
 
               if (ctrl.editorInitialized) {
+                // Clean the value content, keeping default htmlAllowedTags and htmlAllowedAttrs from froala configuration.
+                value = element.froalaEditor('clean.html', value, [], [], false);
                 return element.froalaEditor('node.isEmpty', jQuery('<div>' + value + '</div>').get(0));
               }
 
@@ -106,12 +115,22 @@
               ctrl.options = angular.extend({}, defaultConfig, froalaConfig, scope.froalaOptions, froalaInitOptions);
 
               ctrl.registerEventsWithCallbacks('froalaEditor.initializationDelayed', function() {
-                ngModel.$render()
+                ngModel.$render();
+                  if(ctrl.options.iframe) {
+                      setTimeout(function(){
+                          element.froalaEditor('size.syncIframe');
+                      });
+                  }
               });
 
               ctrl.registerEventsWithCallbacks('froalaEditor.initialized', function () {
                 ctrl.editorInitialized = true;
-              })
+                  if(ctrl.options.iframe) {
+                      setTimeout(function(){
+                          element.froalaEditor('size.syncIframe');
+                      });
+                  }
+              });
 
               // Register events provided in the options
               // Registering events before initializing the editor will bind the initialized event correctly.
